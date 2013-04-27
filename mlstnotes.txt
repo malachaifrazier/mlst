@@ -1,0 +1,41 @@
+MLST PROJECT
+------------
+
+input size: vertices ~100 nodes, edges ~2000
+
+maximize number of nodes with degree 1
+
+|E| choose |V| - 1
+
+min number of leaves has to be the original number of leaves in your graph
+	because leaves are only connected to the rest of the graph by 1 edge
+
+want to maximize number of leaf nodes in our spanning tree
+	because there is more than 1 way to create a tree/leaves for the tree
+
+
+for original graph
+	unweighted, undirected
+find spanning tree using kruskals - instead of weight of edges, sort by degree
+	add a heuristic --> add nodes with highest degree first to tree
+
+e = (u,v)
+max(deg(u), deg(v))
+
+
+we will be using network x to make graphs
+
+TO DO
+-----
+
+CODE PART
+get algorithm down
+	1) heuristic based spanning tree
+	2) local edge swaps (paper to read)
+		run it for the whole graph - runtime is polynomial to size of edges
+		depends on how many edge swaps you do
+	3) tree based (paper to read)
+
+
+Need to create HARD INSTANCES
+	need to think of principles for hard instances
