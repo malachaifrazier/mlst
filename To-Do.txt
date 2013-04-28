@@ -1,0 +1,9 @@
+====== Hard Instances ======-
+- Write example hard instance that fails Heuristic MST
+
+====== Solution Code  =======
+- Implement Heuristic Spanning Tree (Diiv)
+- Implement Local 1-Edge Swap [algorithm1]
+- Implement Local 2-Edge Swap [algorithm]
+- Implement [algorithm2]
+- Implement conversion networkx data structure to adjacency list for submission
