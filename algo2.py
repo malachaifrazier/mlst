@@ -40,6 +40,11 @@ def algo(G):
                         T.add_edge(item[1])                   
         F.add_edges_from(T.edges())
         G.remove_nodes_from(T.nodes())
-        #I'm not sure how to do the last line in the algorithm...
-        #Connect the trees in F and all vertices not in F to form a spanning tree T.
-        return F
+    #Connect the trees in F and all vertices not in F to form a spanning tree T.
+    #I made this line work but seems like it's not quite efficient.
+    S = nx.Graph(G)
+    S.remove_edges_from(F.edges())
+    for e in S.edges():
+        if not nx.has_path(e[0],e[1]):
+            F.add_edge(e[0],e[1])               
+    return F
