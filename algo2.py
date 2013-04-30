@@ -45,6 +45,6 @@ def algo(G):
     S = nx.Graph(G)
     S.remove_edges_from(F.edges())
     for e in S.edges():
-        if not nx.has_path(e[0],e[1]):
+        if not nx.has_path(F,e[0],e[1]):
             F.add_edge(e[0],e[1])               
     return F
