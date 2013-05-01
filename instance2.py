@@ -1,6 +1,6 @@
 from random import random
 import networkx as nx
-
+from random import random
 def instance2():
     lst = []
     for i in range(11):
