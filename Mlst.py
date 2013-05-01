@@ -4,8 +4,6 @@
 # <codecell>
 
 import networkx as nx
-import UnionFind as uf
-import MinimumSpanningTree as mst
 import itertools as it
 
 # <codecell>
@@ -38,9 +36,7 @@ def degBasedMST(G):
     Output: MST of G where weight of edge is max degree of its endpoint vertexes
     """
     setEdgeWeights(G)
-    mstEdgeLst = mst.MinimumSpanningTree(G)
-    T = nx.Graph()
-    T.add_edges_from(mstEdgeLst)
+    T = nx.algorithms.mst.minimum_spanning_tree(G)
     return T
 
 # <codecell>
@@ -50,10 +46,7 @@ def unityMST(G):
     Input: Unweighted or Weighted networkx undirected graph G (Caution weights will be overwritten)
     Output: MST of G where all edge weights are one
     """
-    unityEdgeWeights(G)
-    mstEdgeLst = mst.MinimumSpanningTree(G)
-    T = nx.Graph()
-    T.add_edges_from(mstEdgeLst)
+    T = nx.algorithms.mst.minimum_spanning_tree(G)
     return T
 
 def one_edge_swap(G):
