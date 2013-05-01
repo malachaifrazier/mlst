@@ -2,6 +2,7 @@ from random import random
 import networkx as nx
 
 def instance1():
+    #make a star of 4 24-node stars
     A = nx.star_graph(24)
     B = nx.star_graph(24)
     C = nx.star_graph(24)
@@ -15,4 +16,14 @@ def instance1():
         x = int(random()*100)
         y = int(random()*100)
         E.add_edge(x,y)
-    return E
+    
+    #randomize the labels of nodes    
+    H = nx.Graph()
+    H.add_nodes_from(E.nodes())
+    H.add_edges_from(E.edges())
+    for n in H.nodes():
+        new = n + int(random()*1000)
+        while(new in H.nodes()):
+            new = n + int(random()*1000)
+        H = nx.relabel_nodes(H,{n:new})
+    return H
