@@ -4,7 +4,8 @@ from random import random
 def instance3():
     lst = []
     count = 0
-    stars = 7
+    size = []
+    leaves = 0
     while(count < 100):
         x = int(random()*100)%10
         if(count + x + 1 > 100):
@@ -16,6 +17,8 @@ def instance3():
     lst.append(nx.star_graph(r-1))
     L = nx.Graph()
     for item in lst:
+        leaves += nx.number_of_nodes(item)-1
+        size.append(nx.number_of_nodes(item))
         L = nx.disjoint_union(L,item)
 
     L.add_node(99)
@@ -28,4 +31,7 @@ def instance3():
         x = int(random()*100)
         y = int(random()*100)
         L.add_edge(x,y)
+        
+    print("Number of nodes in each star: " + str(size))
+    print("Total num of leaves: " + str(leaves))
     return L
