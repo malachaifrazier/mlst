@@ -7,3 +7,5 @@
 - Implement Local 2-Edge Swap [algorithm] (Diiv)
 - Implement [algorithm2] (Phyo)
 - Implement conversion networkx data structure to adjacency list for submission (Alex)
+- Modify instance1 to add random nodes in between edges
+- Implement a script that will run instances1() 1000 times and choose the 3 best randomly generated graph 
