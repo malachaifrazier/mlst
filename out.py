@@ -12,5 +12,5 @@ def convert_graphs(graphList):
 	filez = []
 	filez.append(str(len(graphList)) + "\n")
 	for graph in graphList:
-		filez.add(convert_edges(graph.edges())
+		filez.append(convert_edges(graph.edges()))
 	return list(itertools.chain(*filez))
