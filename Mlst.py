@@ -4,8 +4,6 @@
 # <codecell>
 
 import networkx as nx
-import UnionFind as uf
-import MinimumSpanningTree as mst
 import itertools as it
 
 # <codecell>
@@ -38,9 +36,7 @@ def degBasedMST(G):
     Output: MST of G where weight of edge is max degree of its endpoint vertexes
     """
     setEdgeWeights(G)
-    mstEdgeLst = mst.MinimumSpanningTree(G)
-    T = nx.Graph()
-    T.add_edges_from(mstEdgeLst)
+    T = nx.algorithms.mst.minimum_spanning_tree(G)
     return T
 
 # <codecell>
@@ -50,10 +46,7 @@ def unityMST(G):
     Input: Unweighted or Weighted networkx undirected graph G (Caution weights will be overwritten)
     Output: MST of G where all edge weights are one
     """
-    unityEdgeWeights(G)
-    mstEdgeLst = mst.MinimumSpanningTree(G)
-    T = nx.Graph()
-    T.add_edges_from(mstEdgeLst)
+    T = nx.algorithms.mst.minimum_spanning_tree(G)
     return T
 
 def one_edge_swap(G):
@@ -62,7 +55,16 @@ def one_edge_swap(G):
     Output: Generate a T one edge swap output
     """
    
-    T = degBasedMST(G);
+    T1 = degBasedMST(G);
+    T2 = unityMST(G);
+
+    print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
+    print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
+
+    if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
+        T = T1.copy()
+    else: 
+        T = T2.copy()
 
     for e in list(set(G.edges()).difference(set(T.edges()))):
         U = T.copy()
@@ -77,14 +79,12 @@ def one_edge_swap(G):
 
             newDegrees = list(U.degree(U.nodes()).values()) 
 
-            print newDegrees.count(1) 
-            print Degrees.count(1)
-
             if newDegrees.count(1) > Degrees.count(1): 
-                print "Changing"
                 T = U.copy()
 
             U.add_edge(f[0],f[1]);
+
+    print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
 
     return T
 
