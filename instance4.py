@@ -3,45 +3,17 @@ from random import random
 
 def instance4():
     lst = []
-    count = 0
-    size = []
-    leaves = 0
-    while(count < 100):
-        x = int(random()*100)%10
-        if(count + x + 1 > 100):
-            break
-        lst.append(nx.cycle_graph(x))
-        count = count + x + 1
-        
-    r = 100 - 1 - count
-    lst.append(nx.cycle_graph(r-1))
+    for _ in range(25):
+        lst.append(nx.diamond_graph())
+    
     L = nx.Graph()
-    for item in lst:
-        leaves += 2
-        size.append(nx.number_of_nodes(item))
-        L = nx.disjoint_union(L,item)
-
-    L.add_node(99)
+    for i in lst:
+        L = nx.disjoint_union(L,i)
     
-    totaling = 0
-    for item in size:
-        L.add_edge(99, totaling)
-        totaling += item
+    r = 0
+    while(r <= 92):
+        L.add_edge(r+3, r+4)
+        r+=4
+    L.add_edge(0,99)
     
-    for i in range(2*L.number_of_edges()):
-        x = int(random()*100)
-        y = int(random()*100)
-        L.add_edge(x,y)
-        
-               
-    for n in L.nodes():
-        new = n + 100 + int(random()*1000)
-        while(new in L.nodes()):
-            new = n + 100 + int(random()*1000)
-        L = nx.relabel_nodes(L,{n:new})
-        
-    print("Number of nodes in each loop: " + str(size))
-    print("Total num of leaves: " + str(leaves))
-    print("Total num of edges: " + str(L.number_of_edges()))
-    print("ratio of leaves/edges: " + str(float(leaves)/L.number_of_edges()))
     return L
