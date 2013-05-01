@@ -32,7 +32,12 @@ def instance3():
         x = int(random()*100)
         y = int(random()*100)
         L.add_edge(x,y)
-        
+               
+    for n in L.nodes():
+        new = n + 100 + int(random()*1000)
+        while(new in L.nodes()):
+            new = n + 100 + int(random()*1000)
+        L = nx.relabel_nodes(L,{n:new})
         
     print("Number of nodes in each star: " + str(size))
     print("Total num of leaves: " + str(leaves))
