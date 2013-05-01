@@ -6,6 +6,7 @@
 import networkx as nx
 import UnionFind as uf
 import MinimumSpanningTree as mst
+import itertools as it
 
 # <codecell>
 
@@ -55,136 +56,89 @@ def unityMST(G):
     T.add_edges_from(mstEdgeLst)
     return T
 
-# <codecell>
+def one_edge_swap(G):
+    """ 
+    Input: Spanning tree T and original graph G 
+    Output: Generate a T one edge swap output
+    """
+   
+    T = degBasedMST(G);
 
-G1 = nx.wheel_graph(5)
-nx.draw(G1)
+    for e in list(set(G.edges()).difference(set(T.edges()))):
+        U = T.copy()
+        
+        path = nx.shortest_path(T, e[0], e[1])
 
-# <codecell>
+        for f in zip(path[0:],path[1:]):
+            Degrees = list(T.degree(T.nodes()).values())
+            
+            U.add_edge(e[0],e[1])
+            U.remove_edge(f[0],f[1])
 
-nx.draw(unityMST(G1))
+            newDegrees = list(U.degree(U.nodes()).values()) 
 
-# <codecell>
+            print newDegrees.count(1) 
+            print Degrees.count(1)
 
-nx.draw(degBasedMST(G1))
+            if newDegrees.count(1) > Degrees.count(1): 
+                print "Changing"
+                T = U.copy()
 
-# <codecell>
+            U.add_edge(f[0],f[1]);
 
-G2 = nx.hypercube_graph(3)
-nx.draw(G2)
+    return T
 
-# <codecell>
+def two_edge_swap(G):
+    """ 
+    Input: Spanning tree T and original graph G 
+    Output: Generate a T one edge swap output
+    """
 
-nx.draw(unityMST(G2))
+    T = degBasedMST(G);
 
-# <codecell>
+    M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
+    print M
 
-nx.draw(degBasedMST(G2))
+    i = 1
+    for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
+        i += 1
 
-# <codecell>
+        U = T.copy()
+        Degrees = list(T.degree(T.nodes()).values())
+        
+        path1 = nx.shortest_path(T, e1[0], e1[1])
 
-G3 = nx.barbell_graph(4,2)
-nx.draw(G3)
+        for f1 in zip(path1[0:],path1[1:]):
+            
+            U.add_edge(e1[0],e1[1])
+            U.remove_edge(f1[0],f1[1])
 
-# <codecell>
+            path2 = nx.shortest_path(T, e2[0], e2[1])
 
-nx.draw(unityMST(G3))
+            for f2 in zip(path2[0:],path2[1:]):
+                    
+                U.add_edge(e2[0],e2[1])
+                
+                if (tuple([f2[0],f2[1]]) in U.edges()):
+                    U.remove_edge(f2[0],f2[1])
+                
+                newDegrees = list(U.degree(U.nodes()).values()) 
 
-# <codecell>
+                if newDegrees.count(1) > Degrees.count(1):
+                    print newDegrees.count(1)
+                    print i
+                    T = U.copy()
+                    Degrees = list(T.degree(T.nodes()).values())
 
-nx.draw(degBasedMST(G3))
+                U.add_edge(f2[0],f2[1]);
 
-# <codecell>
+            U.add_edge(f1[0],f1[1]);
 
-G4 = nx.complete_graph(6)
-nx.draw(G4)
+    return T
 
-# <codecell>
+def leaves(T):
+    return list(T.degree(T.nodes()).values()).count(1)
 
-nx.draw(unityMST(G4))
-
-# <codecell>
-
-nx.draw(degBasedMST(G4))
-
-# <codecell>
-
-G5 = nx.complete_bipartite_graph(3,5)
-nx.draw(G5)
-
-# <codecell>
-
-nx.draw(unityMST(G5))
-
-# <codecell>
-
-nx.draw(degBasedMST(G5))
-
-# <codecell>
-
-G6 = nx.cycle_graph(5)
-nx.draw(G6)
-
-# <codecell>
-
-nx.draw(unityMST(G6))
-
-# <codecell>
-
-nx.draw(degBasedMST(G6))
-
-# <codecell>
-
-G7 = nx.lollipop_graph(5,3)
-nx.draw(G7)
-
-# <codecell>
-
-nx.draw(unityMST(G7))
-
-# <codecell>
-
-nx.draw(degBasedMST(G7))
-
-# <codecell>
-
-G8 = nx.circular_ladder_graph(5)
-nx.draw(G8)
-
-# <codecell>
-
-nx.draw(unityMST(G8))
-
-# <codecell>
-
-nx.draw(degBasedMST(G8))
-
-# <codecell>
-
-G9 = nx.star_graph(5)
-nx.draw(G9)
-
-# <codecell>
-
-nx.draw(unityMST(G9))
-
-# <codecell>
-
-nx.draw(degBasedMST(G9))
-
-# <codecell>
-
-G10 = nx.gnp_random_graph(8,.5)
-nx.draw(G10)
-
-# <codecell>
-
-nx.draw(unityMST(G10))
-
-# <codecell>
-
-nx.draw(degBasedMST(G10))
-
-# <codecell>
-
+def count_iterable(i):
+    return sum(1 for e in i)
 
