@@ -178,16 +178,13 @@ def get_three_hardest_instances(k):
 		
 		
 		if C4[1] > C1[1]:
-			hard_lst.remove(C1)
-			hard_lst.append(C4)
+			C1 = C4
 			
 		if C5[1] > C2[1]:
-			hard_lst.remove(C2)
-			hard_lst.append(C5)
+			C2 = C5
 			
 		if C6[1] > C3[1]:
-			hard_lst.remove(C3)
-			hard_lst.append(C6)
+			C3 = C6
 			
 	hard_graphs = [hard_lst[0][0][0],hard_lst[1][0][0],hard_lst[2][0][0]]
 	opt_trees = [hard_lst[0][0][1],hard_lst[1][0][1],hard_lst[2][0][1]]
