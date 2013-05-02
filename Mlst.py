@@ -168,6 +168,8 @@ def get_three_hardest_instances(k):
 	hard_lst = [C1,C2,C3]
 	for i in range(k):
 		
+		print i
+		
 		curr_graph_tup1 = in1.instance1_1000()
 		unity_tree1 = unityMST(curr_graph_tup1[0])
 		C4 = tuple([curr_graph_tup1,leaves(curr_graph_tup1[1])-leaves(unity_tree1)])
