@@ -29,9 +29,9 @@ def instance1():
     G.add_edges_from(T.edges())
 
     # add random edges
-    for i in range(1000):
+    while(G.number_of_edges() < 2000):
         x = int(random()*15897)%100
-        y = int(random()*17691)%100
+        y = int(random()*17691)%100        
         G.add_edge(G.nodes()[x],G.nodes()[y])
 
     return (G,T)
