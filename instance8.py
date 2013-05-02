@@ -1,5 +1,7 @@
-import networkx as nx
+import random as r
 from random import random
+from random import shuffle
+import networkx as nx
 import Mlst as mlst
 
 def instance8_1000():
@@ -26,8 +28,8 @@ def instance8_1000():
     T.add_edges_from([(84,0),(84,14),(84,28),(84,42),(84,56),(84,70)])
     
     #add 10 more nodes with random edges
-    T.add_nodes_from(range(85,101))
-    for i in range(85,101):
+    T.add_nodes_from(range(85,100))
+    for i in range(85,100):
         x = int(random()*5371)%90
         T.add_edge(i,x)
         
@@ -35,11 +37,12 @@ def instance8_1000():
     leaves = list(T.degree(T.nodes()).values()).count(1)
     
     #randomize the label of nodes
-    for n in T.nodes():
-        new = n + int(random()*2000)
-        while(new in T.nodes()):
-            new = n + int(random()*2000)
-        T = nx.relabel_nodes(T,{n:new})
+    n = range(100)
+    new = range(100)
+
+    r.shuffle(new)
+
+    T = nx.relabel_nodes(T,dict(zip(n,new)))
         
     G = nx.Graph()
     G.add_nodes_from(T.nodes())
@@ -50,6 +53,10 @@ def instance8_1000():
         x = int(random()*15897)%100
         y = int(random()*17691)%100
         G.add_edge(G.nodes()[x],G.nodes()[y])
+
+    for e in G.edges():
+        if e[0] == e[1]:
+            G.remove_edge(e[0],e[1])
 
     G = G.to_undirected()  
     T = mlst.one_edge_swap(G)  

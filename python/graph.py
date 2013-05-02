@@ -27,7 +27,7 @@ class Edge:
         for i in range(2):
             if self.ends[i] < 0 or self.ends[i] >= config.MAX_NUM_NODES:
                 raise EdgeException(('Node {0} out of range [0--{1}] '+
-                    'in edge {2}.').format(self.ends[i], MAX_NUM_NODES-1,
+                    'in edge {2}.').format(self.ends[i], config.MAX_NUM_NODES-1,
                         self))
         if self.ends[0] == self.ends[1]:
             raise EdgeException('Self-loop not allowed in '+

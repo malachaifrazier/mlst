@@ -1,4 +1,6 @@
+import random as r
 from random import random
+from random import shuffle
 import networkx as nx
 
 def instance1_1000():
@@ -15,11 +17,17 @@ def instance1_1000():
     
     #randomize the labels of nodes    
 
-    for n in T.nodes():
-        new = n + int(random()*10000)
-        while(new in T.nodes()):
-            new = n + int(random()*10000)
-        T = nx.relabel_nodes(T,{n:new})
+    # for n in T.nodes():
+    #     new = n + int(random()*10000)
+    #    while(new in T.nodes()):
+    #        new = n + int(random()*10000)
+    
+    n = range(100)
+    new = range(100)
+
+    r.shuffle(new)
+
+    T = nx.relabel_nodes(T,dict(zip(n,new)))
 
     # T is optimal solution
     # G is the graph
@@ -33,6 +41,10 @@ def instance1_1000():
         x = int(random()*15897)%100
         y = int(random()*17691)%100
         G.add_edge(G.nodes()[x],G.nodes()[y])
+
+    for e in G.edges():
+        if e[0] == e[1]:
+            G.remove_edge(e[0],e[1])
 
     return (G,T)
     
@@ -50,11 +62,12 @@ def instance1_2000():
     
     #randomize the labels of nodes    
 
-    for n in T.nodes():
-        new = n + int(random()*10000)
-        while(new in T.nodes()):
-            new = n + int(random()*10000)
-        T = nx.relabel_nodes(T,{n:new})
+    n = range(100)
+    new = range(100)
+
+    r.shuffle(new)
+
+    T = nx.relabel_nodes(T,dict(zip(n,new)))
 
     # T is optimal solution
     # G is the graph
@@ -69,5 +82,9 @@ def instance1_2000():
         y = int(random()*17691)%100
         
         G.add_edge(G.nodes()[x],G.nodes()[y])
+
+    for e in G.edges():
+        if e[0] == e[1]:
+            G.remove_edge(e[0],e[1])
 
     return (G,T)
