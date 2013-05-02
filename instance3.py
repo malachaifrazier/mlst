@@ -27,7 +27,7 @@ def instance3():
     for item in size:
         L.add_edge(99, totaling)
         totaling += item
-
+    
     for i in range(1500):
         x = int(random()*100)
         y = int(random()*100)
@@ -41,4 +41,6 @@ def instance3():
         
     print("Number of nodes in each star: " + str(size))
     print("Total num of leaves: " + str(leaves))
+    print("Total num of edges: " + str(L.number_of_edges()))
+    print("ratio of leaves/edges: " + str(float(leaves)/L.number_of_edges()))
     return L
