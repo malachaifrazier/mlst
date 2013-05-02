@@ -31,9 +31,6 @@ def instance7():
     for i in range(90,101):
         x = int(random()*5371)%90
         T.add_edge(i,x)
-        
-    #count the number of leaves
-    leaves = list(T.degree(T.nodes()).values()).count(1)
     
     #randomize the label of nodes
     for n in T.nodes():
@@ -52,4 +49,4 @@ def instance7():
         y = int(random()*17691)%100
         G.add_edge(G.nodes()[x],G.nodes()[y])
         
-    return (G,T,leaves)
+    return (G,T)
