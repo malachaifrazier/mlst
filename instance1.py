@@ -7,23 +7,31 @@ def instance1():
     B = nx.star_graph(24)
     C = nx.star_graph(24)
     D = nx.star_graph(23)
-    E = nx.disjoint_union(A,B)
-    E = nx.disjoint_union(E,C)
-    E = nx.disjoint_union(E,D)
-    E.add_node(99)
-    E.add_edges_from([(0,99),(25,99),(50,99),(75,99)])
-    for i in range(1500):
-        x = int(random()*100)
-        y = int(random()*100)
-        E.add_edge(x,y)
+    T = nx.disjoint_union(A,B)
+    T = nx.disjoint_union(T,C)
+    T = nx.disjoint_union(T,D)
+    T.add_node(99)
+    T.add_edges_from([(0,99),(25,99),(50,99),(75,99)])
     
     #randomize the labels of nodes    
-    H = nx.Graph()
-    H.add_nodes_from(E.nodes())
-    H.add_edges_from(E.edges())
-    for n in H.nodes():
-        new = n + int(random()*1000)
-        while(new in H.nodes()):
-            new = n + int(random()*1000)
-        H = nx.relabel_nodes(H,{n:new})
-    return H
+
+    for n in T.nodes():
+        new = n + int(random()*10000)
+        while(new in T.nodes()):
+            new = n + int(random()*10000)
+        T = nx.relabel_nodes(T,{n:new})
+
+    # T is optimal solution
+    # G is the graph
+
+    G = nx.Graph()
+    G.add_nodes_from(T.nodes())
+    G.add_edges_from(T.edges())
+
+    # add random edges
+    for i in range(1000):
+        x = int(random()*15897)%100
+        y = int(random()*17691)%100
+        G.add_edge(G.nodes()[x],G.nodes()[y])
+
+    return (G,T)
