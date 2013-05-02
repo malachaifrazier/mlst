@@ -6,6 +6,8 @@
 import networkx as nx
 import itertools as it
 import instance1 as in1
+import instance7 as in7
+import instance8 as in8
 
 # <codecell>
 
