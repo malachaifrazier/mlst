@@ -72,20 +72,24 @@ def one_edge_swap(G):
     for e in list(set(G.edges()).difference(set(T.edges()))):
         U = T.copy()
         
-        path = nx.shortest_path(T, e[0], e[1])
+        try:
+            path = nx.shortest_path(T, e[0], e[1])
 
-        for f in zip(path[0:],path[1:]):
-            Degrees = list(T.degree(T.nodes()).values())
-            
-            U.add_edge(e[0],e[1])
-            U.remove_edge(f[0],f[1])
+            for f in zip(path[0:],path[1:]):
+                Degrees = list(T.degree(T.nodes()).values())
+                
+                U.add_edge(e[0],e[1])
+                U.remove_edge(f[0],f[1])
 
-            newDegrees = list(U.degree(U.nodes()).values()) 
+                newDegrees = list(U.degree(U.nodes()).values()) 
 
-            if newDegrees.count(1) > Degrees.count(1): 
-                T = U.copy()
+                if newDegrees.count(1) > Degrees.count(1): 
+                    T = U.copy()
 
-            U.add_edge(f[0],f[1]);
+                U.add_edge(f[0],f[1]);
+
+        except nx.NetworkXNoPath:
+            pass
 
     # print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
 
