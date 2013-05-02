@@ -152,9 +152,9 @@ def get_three_hardest_instances(k):
 	aka the graphs in which unityMST does the worst and the other
 	containing the optimal MLST for those graphs
 	"""
-	G1_tup = in1.instance1()
-	G2_tup = in1.instance1()
-	G3_tup = in1.instance1()
+	G1_tup = in1.instance1_1000()
+	G2_tup = in1.instance1_2000()
+	G3_tup = in8.instance8_1000()
 	T1 = unityMST(G1_tup[0])
 	T2 = unityMST(G2_tup[0])
 	T3 = unityMST(G3_tup[0])
@@ -163,16 +163,32 @@ def get_three_hardest_instances(k):
 	C3 = tuple([G3_tup,leaves(G3_tup[1])-leaves(T3)])
 	hard_lst = [C1,C2,C3]
 	for i in range(k):
-		curr_graph_tup = in1.instance1()
-		unity_tree = unityMST(curr_graph_tup[0])
-		C4 = tuple([curr_graph_tup,leaves(curr_graph_tup[1])-leaves(unity_tree)])
-		worst = min([hard_lst[0][1],hard_lst[1][1],hard_lst[2][1]])
-		if C4[1] > worst:
-			for tup in hard_lst:
-				if tup[1] == worst:
-					hard_lst.remove(tup)
-					break
+		
+		curr_graph_tup1 = in1.instance1_1000()
+		unity_tree1 = unityMST(curr_graph_tup1[0])
+		C4 = tuple([curr_graph_tup1,leaves(curr_graph_tup1[1])-leaves(unity_tree1)])
+		
+		curr_graph_tup2 = in1.instance1_2000()
+		unity_tree2 = unityMST(curr_graph_tup2[0])
+		C5 = tuple([curr_graph_tup2,leaves(curr_graph_tup2[1])-leaves(unity_tree2)])
+		
+		curr_graph_tup3 = in8.instance8_1000()
+		unity_tree3 = unityMST(curr_graph_tup3[0])
+		C6 = tuple([curr_graph_tup3,leaves(curr_graph_tup3[1])-leaves(unity_tree3)])
+		
+		
+		if C4[1] > C1[1]:
+			hard_lst.remove(C1)
 			hard_lst.append(C4)
+			
+		if C5[1] > C2[1]:
+			hard_lst.remove(C2)
+			hard_lst.append(C5)
+			
+		if C6[1] > C3[1]:
+			hard_lst.remove(C3)
+			hard_lst.append(C6)
+			
 	hard_graphs = [hard_lst[0][0][0],hard_lst[1][0][0],hard_lst[2][0][0]]
 	opt_trees = [hard_lst[0][0][1],hard_lst[1][0][1],hard_lst[2][0][1]]
 	return hard_graphs,opt_trees
