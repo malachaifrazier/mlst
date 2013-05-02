@@ -61,8 +61,8 @@ def one_edge_swap(G):
     T1 = degBasedMST(G);
     T2 = unityMST(G);
 
-    print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
-    print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
+    # print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
+    # print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
 
     if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
         T = T1.copy()
@@ -87,7 +87,7 @@ def one_edge_swap(G):
 
             U.add_edge(f[0],f[1]);
 
-    print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
+    # print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
 
     return T
 

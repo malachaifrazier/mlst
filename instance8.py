@@ -50,8 +50,9 @@ def instance8_1000():
         x = int(random()*15897)%100
         y = int(random()*17691)%100
         G.add_edge(G.nodes()[x],G.nodes()[y])
-    
-    T = mlst.one_edge_swap(G)    
+
+    G = G.to_undirected()  
+    T = mlst.one_edge_swap(G)  
     return (G,T)
     
 def instance8_2000():
