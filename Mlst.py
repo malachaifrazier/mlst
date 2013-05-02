@@ -156,14 +156,14 @@ def get_three_hardest_instances(k):
 	T1 = unityMST(G1_tup[0])
 	T2 = unityMST(G2_tup[0])
 	T3 = unityMST(G3_tup[0])
-	C1 = tuple([G1_tup[0],leaves(G1_tup[1])-leaves(T1)])
-	C2 = tuple([G2_tup[0],leaves(G2_tup[1])-leaves(T2)])
-	C3 = tuple([G3_tup[0],leaves(G3_tup[1])-leaves(T3)])
+	C1 = tuple([G1_tup,leaves(G1_tup[1])-leaves(T1)])
+	C2 = tuple([G2_tup,leaves(G2_tup[1])-leaves(T2)])
+	C3 = tuple([G3_tup,leaves(G3_tup[1])-leaves(T3)])
 	hard_lst = [C1,C2,C3]
 	for i in range(k):
 		curr_graph_tup = in1.instance1()
-		unity_tree = unityMST(curr_graph)
-		C4 = tuple([curr_graph_tup[0],curr_graph_tup[1]-leaves(unity_tree)])
+		unity_tree = unityMST(curr_graph_tup[0])
+		C4 = tuple([curr_graph_tup,leaves(curr_graph_tup[1])-leaves(unity_tree)])
 		worst = min([hard_lst[0][1],hard_lst[1][1],hard_lst[2][1]])
 		if C4[1] > worst:
 			for tup in hard_lst:
@@ -171,7 +171,6 @@ def get_three_hardest_instances(k):
 					hard_lst.remove(tup)
 					break
 			hard_lst.append(C4)
-	hard_graphs = list(hard_list[0][0][0],hard_list[1][0][0],hard_list[2][0][0])
-	opt_trees = list(hard_list[0][0][1],hard_list[1][0][1],hard_list[2][0][1])
-	return tuple([hard_graphs,opt_trees])
-
+	hard_graphs = [hard_lst[0][0][0],hard_lst[1][0][0],hard_lst[2][0][0]]
+	opt_trees = [hard_lst[0][0][1],hard_lst[1][0][1],hard_lst[2][0][1]]
+	return hard_graphs,opt_trees
