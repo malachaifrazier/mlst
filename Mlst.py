@@ -165,7 +165,6 @@ def get_three_hardest_instances(k):
 	C1 = tuple([G1_tup,leaves(G1_tup[1])-leaves(T1)])
 	C2 = tuple([G2_tup,leaves(G2_tup[1])-leaves(T2)])
 	C3 = tuple([G3_tup,leaves(G3_tup[1])-leaves(T3)])
-	hard_lst = [C1,C2,C3]
 	for i in range(k):
 		
 		print i
@@ -192,6 +191,6 @@ def get_three_hardest_instances(k):
 		if C6[1] > C3[1]:
 			C3 = C6
 			
-	hard_graphs = [hard_lst[0][0][0],hard_lst[1][0][0],hard_lst[2][0][0]]
-	opt_trees = [hard_lst[0][0][1],hard_lst[1][0][1],hard_lst[2][0][1]]
+	hard_graphs = [C1[0][0],C2[0][0],C3[0][0]]
+	opt_trees = [C1[0][1],C2[0][1],C3[0][1]]
 	return hard_graphs,opt_trees
