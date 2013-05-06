@@ -115,7 +115,7 @@ def two_edge_swap(G):
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
 
-		Degrees = list(T.degree(T.nodes()).values())
+		Degree = list(T.degree(T.nodes()).values()).count(1)
 		U = T.copy()
 
 		U.add_edge(e1[0],e1[1])
@@ -127,27 +127,20 @@ def two_edge_swap(G):
 			
 			U.remove_edge(f1[0],f1[1])
 
-			try:
-				path2 = nx.shortest_path(T, e2[0], e2[1])
+			path2 = nx.shortest_path(T, e2[0], e2[1])
 
-				for f2 in zip(path2[0:],path2[1:]):
-						
-					
-					
-					if (tuple([f2[0],f2[1]]) in U.edges()):
-						U.remove_edge(f2[0],f2[1])
-					
-					newDegrees = list(U.degree(U.nodes()).values()) 
+			for f2 in zip(path2[0:],path2[1:]):
+				
+				if (tuple([f2[0],f2[1]]) in U.edges()):
+					U.remove_edge(f2[0],f2[1])
+				
+				newDegree = list(U.degree(U.nodes()).values()).count(1) 
 
-					if newDegrees.count(1) > Degrees.count(1):
-						print newDegrees.count(1)
-						print i
-						T = U.copy()
-						Degrees = list(T.degree(T.nodes()).values())
+				if newDegree > Degree:
+					T = U.copy()
+					Degree = list(T.degree(T.nodes()).values()).count(1)
 
-					U.add_edge(f2[0],f2[1]);
-			except nx.NetworkXNoPath:
-				pass
+				U.add_edge(f2[0],f2[1]);
 
 			U.add_edge(f1[0],f1[1]);		
 
