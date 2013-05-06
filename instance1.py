@@ -82,7 +82,6 @@ def instance1_2000():
         y = int(random()*17691)%100
         
         G.add_edge(G.nodes()[x],G.nodes()[y])
-
     for e in G.edges():
         if e[0] == e[1]:
             G.remove_edge(e[0],e[1])
