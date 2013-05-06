@@ -98,10 +98,15 @@ def one_edge_swap(G):
 def two_edge_swap(G):
 	""" 
 	Input: Spanning tree T and original graph G 
-	Output: Generate a T one edge swap output
+	Output: Generate a T two edge swap output
 	"""
+	T1 = degBasedMST(G);
+	T2 = unityMST(G);
 
-	T = degBasedMST(G);
+	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
+		T = T1.copy()
+	else: 
+		T = T2.copy()
 
 	M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
 	print M
@@ -110,43 +115,34 @@ def two_edge_swap(G):
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
 
+		Degree = list(T.degree(T.nodes()).values()).count(1)
 		U = T.copy()
-		Degrees = list(T.degree(T.nodes()).values())
+
+		U.add_edge(e1[0],e1[1])
+		U.add_edge(e2[0],e2[1])
 		
-		try:
-			path1 = nx.shortest_path(T, e1[0], e1[1])
+		path1 = nx.shortest_path(T, e1[0], e1[1])
 
-			for f1 in zip(path1[0:],path1[1:]):
+		for f1 in zip(path1[0:],path1[1:]):
+			
+			U.remove_edge(f1[0],f1[1])
+
+			path2 = nx.shortest_path(T, e2[0], e2[1])
+
+			for f2 in zip(path2[0:],path2[1:]):
 				
-				U.add_edge(e1[0],e1[1])
-				U.remove_edge(f1[0],f1[1])
+				if (tuple([f2[0],f2[1]]) in U.edges()):
+					U.remove_edge(f2[0],f2[1])
+				
+				newDegree = list(U.degree(U.nodes()).values()).count(1) 
 
-				try:
-					path2 = nx.shortest_path(T, e2[0], e2[1])
+				if newDegree > Degree:
+					T = U.copy()
+					Degree = list(T.degree(T.nodes()).values()).count(1)
 
-					for f2 in zip(path2[0:],path2[1:]):
-							
-						U.add_edge(e2[0],e2[1])
-						
-						if (tuple([f2[0],f2[1]]) in U.edges()):
-							U.remove_edge(f2[0],f2[1])
-						
-						newDegrees = list(U.degree(U.nodes()).values()) 
+				U.add_edge(f2[0],f2[1]);
 
-						if newDegrees.count(1) > Degrees.count(1):
-							print newDegrees.count(1)
-							print i
-							T = U.copy()
-							Degrees = list(T.degree(T.nodes()).values())
-
-						U.add_edge(f2[0],f2[1]);
-				except nx.NetworkXNoPath:
-					pass
-
-				U.add_edge(f1[0],f1[1]);
-
-		except nx.NetworkXNoPath:
-			pass			
+			U.add_edge(f1[0],f1[1]);		
 
 	return T
 
