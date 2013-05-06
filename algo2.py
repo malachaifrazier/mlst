@@ -33,11 +33,15 @@ def algo(G):
                         
                     elif c == 2:
                         """priority 1"""
-                        p1.append(tuple(l[0],l[1]))
+                        print p1
+                        print l
+                        p1.append((l[0],l[1]))
+                        print p1
                 for item in p1:
                     if ((item[0] not in T) and (item[1] not in T)):
-                        T.add_edge(item[0])
-                        T.add_edge(item[1])                   
+                        print item[0]
+                        # T.add_edge(item[0])
+                        T.add_edge(item[0], item[1])                   
         F.add_edges_from(T.edges())
         G.remove_nodes_from(T.nodes())
     #Connect the trees in F and all vertices not in F to form a spanning tree T.

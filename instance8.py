@@ -59,7 +59,9 @@ def instance8_1000():
             G.remove_edge(e[0],e[1])
 
     G = G.to_undirected()  
-    T = mlst.one_edge_swap(G)  
+    #T = mlst.one_edge_swap(G)  
+    
+    T = nx.Graph()
     return (G,T)
     
 def instance8_2000():
