@@ -9,7 +9,7 @@ in_file = sys.argv[1]
 graph_list = igr.get_nx_graphs(in_file)
 
 
-f1 = open('hard.all.v3.twoedge.out','w')
+f1 = open('hard.all.v3.out','w')
 f2 = open('error_graphs.out','w')
 
 f1.write(str(len(graph_list))+'\n')
