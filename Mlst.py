@@ -116,7 +116,7 @@ def one_edge_swap(G):
 	print "ONE: " + str(leaves(T))
 	return T
 
-def two_edge_swap(G):
+def two_edge_swap(G, I = float("inf")):
 	""" 
 	Input: Spanning tree T and original graph G 
 	Output: Generate a T two edge swap output
@@ -136,15 +136,18 @@ def two_edge_swap(G):
 	G = nx.convert_node_labels_to_integers(G)
 
 	M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
+	M = min([I,M])
 
 	shortest_path = nx.shortest_path
-
-	i = 1
+	is_connected = nx.is_connected
+	i = 0
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
+		if i > I:
+			break
 		# print "Edge Pair " + str(e1) + ' ' + str(e2)
 
-		if not nx.is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
+		if not is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
 			print "FAIL"
 			return T
 
