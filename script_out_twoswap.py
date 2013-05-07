@@ -16,7 +16,7 @@ f1.write(str(len(graph_list))+'\n')
 for graph in graph_list:
     try:
         curr_mlst1 = mlst.one_edge_swap(graph)
-        curr_mlst2 = mlst.two_edge_swap(graph, 100000)
+        curr_mlst2 = mlst.two_edge_swap(graph, curr_mlst1,100000)
         diff = mlst.leaves(curr_mlst1) - mlst.leaves(curr_mlst2)
         if diff < 0:
             print 'two swap chosen'
