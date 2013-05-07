@@ -116,7 +116,7 @@ def one_edge_swap(G):
 	print "ONE: " + str(leaves(T))
 	return T
 
-def two_edge_swap(G, I = float("inf")):
+def two_edge_swap(G, T = None, I = float("inf"), ):
 	""" 
 	Input: Spanning tree T and original graph G 
 	Output: Generate a T two edge swap output
@@ -127,7 +127,7 @@ def two_edge_swap(G, I = float("inf")):
 	print "Deg Based MST: " + str(leaves(T1))
 	print "Unity MST: " + str(leaves(T2))
 
-	if leaves(T1) > leaves(T2):
+	if leaves(T1) > leaves(T2) and T == None:
 		T = T1.copy()
 	else: 
 		T = T2.copy()
