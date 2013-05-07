@@ -116,13 +116,15 @@ def one_edge_swap(G):
 	print "ONE: " + str(leaves(T))
 	return T
 
-def two_edge_swap(G, T = None, I = float("inf"), ):
+def two_edge_swap(G, T_out = None, I = float("inf"), ):
 	""" 
 	Input: Spanning tree T and original graph G 
 	Output: Generate a T two edge swap output
 	"""
 	T1 = degBasedMST(G);
 	T2 = unityMST(G);
+	if T_out != None:
+		T = T_out
 
 	print "Deg Based MST: " + str(leaves(T1))
 	print "Unity MST: " + str(leaves(T2))
@@ -140,7 +142,9 @@ def two_edge_swap(G, T = None, I = float("inf"), ):
 
 	shortest_path = nx.shortest_path
 	is_connected = nx.is_connected
+
 	i = 0
+	Degree = leaves(T)
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
 		if i > I:
@@ -151,7 +155,6 @@ def two_edge_swap(G, T = None, I = float("inf"), ):
 			print "FAIL"
 			return T
 
-		Degree = leaves(T)
 		U = T.copy()
 
 		add = U.add_edge
