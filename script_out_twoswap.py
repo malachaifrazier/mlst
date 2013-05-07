@@ -17,17 +17,14 @@ for graph in graph_list:
     try:
         curr_mlst1 = mlst.one_edge_swap(graph)
         curr_mlst = mlst.two_edge_swap(curr_mlst1)
-        f1.write(str(len(curr_mlst.edges())) + '\n')
         edge_list = out.convert_edges(curr_mlst.edges())
         for edge_str in edge_list:
             f1.write(edge_str)
     except nx.NetworkXNoPath:
-        f2.write(str(len(graph.edges())) + '\n')
         error_edge_list = out.convert_edges(graph.edges())
         for error_edge_str in error_edge_list:
             f2.write(error_edge_str)
         curr_mlst = mlst.one_edge_swap(graph)
-        f1.write(str(len(curr_mlst.edges())) + '\n')
         edge_list = out.convert_edges(curr_mlst.edges())
         for edge_str in edge_list:
             f1.write(edge_str)
