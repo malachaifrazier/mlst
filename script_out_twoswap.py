@@ -15,8 +15,7 @@ f2 = open('error_graphs.out','w')
 f1.write(str(len(graph_list))+'\n')
 for graph in graph_list:
     try:
-        curr_mlst1 = mlst.one_edge_swap(graph)
-        curr_mlst = mlst.two_edge_swap(curr_mlst1)
+        curr_mlst = mlst.two_edge_swap(graph)
         edge_list = out.convert_edges(curr_mlst.edges())
         for edge_str in edge_list:
             f1.write(edge_str)
