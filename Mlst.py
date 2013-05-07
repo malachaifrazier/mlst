@@ -116,51 +116,6 @@ def one_edge_swap(G):
 	print "ONE: " + str(leaves(T))
 	return T
 
-def one_edge_swap_mixed(G):
-	""" 
-	Input: Spanning tree T and original graph G 
-	Output: Generate a T one edge swap output
-	"""
-   
-	T1 = degBasedMST(G);
-	T2 = unityMST(G);
-
-	# print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
-	# print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
-
-	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
-		T = T1.copy()
-	else: 
-		T = T2.copy()
-
-	for e in list(set(G.edges()).difference(set(T.edges()))):
-		U = T.copy()
-		
-		try:
-			path = nx.shortest_path(T, e[0], e[1])
-
-			for f in zip(path[0:],path[1:]):
-				Degrees = list(T.degree(T.nodes()).values())
-				
-				U.add_edge(e[0],e[1])
-				U.remove_edge(f[0],f[1])
-
-				newDegrees = list(U.degree(U.nodes()).values()) 
-
-				if newDegrees.count(1) > Degrees.count(1): 
-					T = U.copy()
-
-				U.add_edge(f[0],f[1]);
-
-		except nx.NetworkXNoPath:
-			pass
-
-	# print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
-
-	if leaves(T) < leaves(T2):
-		T = T2
-	return T
-
 def two_edge_swap(G):
 	""" 
 	Input: Spanning tree T and original graph G 
@@ -169,7 +124,10 @@ def two_edge_swap(G):
 	T1 = degBasedMST(G);
 	T2 = unityMST(G);
 
-	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
+	print "Deg Based MST: " + str(leaves(T1))
+	print "Unity MST: " + str(leaves(T2))
+
+	if leaves(T1) > leaves(T2):
 		T = T1.copy()
 	else: 
 		T = T2.copy()
@@ -178,6 +136,8 @@ def two_edge_swap(G):
 	G = nx.convert_node_labels_to_integers(G)
 
 	M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
+
+	shortest_path = nx.shortest_path
 
 	i = 1
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
@@ -191,27 +151,31 @@ def two_edge_swap(G):
 		Degree = leaves(T)
 		U = T.copy()
 
-		U.add_edge(e1[0],e1[1])
-		U.add_edge(e2[0],e2[1])
+		add = U.add_edge
+		remove = U.remove_edge
+		edges = U.edges
 
-		path1 = nx.shortest_path(T, e1[0], e1[1])
+		add(e1[0],e1[1])
+		add(e2[0],e2[1])
+
+		path1 = shortest_path(T, e1[0], e1[1])
 		# print path1
 
 		for f1 in zip(path1[0:],path1[1:]):
 			
 			if f1 != e1 and f1 != e2:
-				U.remove_edge(f1[0],f1[1])
+				remove(f1[0],f1[1])
 
-				path2 = nx.shortest_path(T, e2[0], e2[1])
-				# print path2
+				path2 = shortest_path(T, e2[0], e2[1])
 
 				flag = True
+
 				for f2 in zip(path2[0:],path2[1:]):
 					
 					if f2 != e1 and f2 != e2:
-						if (tuple([f2[0],f2[1]]) in U.edges()):
+						if (tuple([f2[0],f2[1]]) in edges()):
 							
-							U.remove_edge(f2[0],f2[1])
+							remove(f2[0],f2[1])
 						
 							newDegree = leaves(U) 
 
@@ -223,9 +187,9 @@ def two_edge_swap(G):
 								T = U.copy()
 								Degree = leaves(T)
 
-							U.add_edge(f2[0],f2[1]);
+							add(f2[0],f2[1]);
 
-				U.add_edge(f1[0],f1[1]);		
+				add(f1[0],f1[1]);		
 
 	return T
 
