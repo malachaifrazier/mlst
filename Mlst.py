@@ -52,7 +52,7 @@ def unityMST(G):
 	T = nx.algorithms.mst.minimum_spanning_tree(G)
 	return T
 
-def one_edge_swap(G,T):
+def one_edge_swap(G):
 	""" 
 	Input: Spanning tree T and original graph G 
 	Output: Generate a T one edge swap output
@@ -65,9 +65,9 @@ def one_edge_swap(G,T):
 	# print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
 
 	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
-		T1 = T1.copy()
+		T = T1.copy()
 	else: 
-		T2 = T2.copy()
+		T = T2.copy()
 
 	for e in list(set(G.edges()).difference(set(T.edges()))):
 		U = T.copy()
@@ -118,12 +118,17 @@ def two_edge_swap(G):
 		i += 1
 		# print "Edge Pair " + str(e1) + ' ' + str(e2)
 
-		Degree = list(T.degree(T.nodes()).values()).count(1)
+		if nx.is_connected(T) and (T.number_of_nodes == G.number_of_nodes) and (T.number_of_edges() == T.number_of_nodes - 1):
+			print "FAIL"
+		else:
+			print "OK"
+
+		Degree = leaves(T)
 		U = T.copy()
 
 		U.add_edge(e1[0],e1[1])
 		U.add_edge(e2[0],e2[1])
-		# print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
+		print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
 
 		path1 = nx.shortest_path(T, e1[0], e1[1])
 		# print path1
@@ -142,14 +147,14 @@ def two_edge_swap(G):
 						if (tuple([f2[0],f2[1]]) in U.edges()):
 							U.remove_edge(f2[0],f2[1])
 						
-						newDegree = list(U.degree(U.nodes()).values()).count(1) 
+						newDegree = leaves(U) 
 
 						if newDegree > Degree:
-							# print "Modified"
-							# print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
+							print "Modified"
+							print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
 							print str(i) + " of " + str(M) 
 							T = U.copy()
-							Degree = list(T.degree(T.nodes()).values()).count(1)
+							Degree = leaves(T)
 
 						U.add_edge(f2[0],f2[1]);
 
