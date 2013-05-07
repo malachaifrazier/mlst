@@ -55,7 +55,6 @@ def unityMST(G):
 	Output: MST of G where all edge weights are one
 	"""
 	T = nx.algorithms.mst.minimum_spanning_tree(G)
-	print leaves(T)
 	return T
 
 def one_edge_swap(G):
@@ -128,6 +127,7 @@ def two_edge_swap(G):
 
 		if not nx.is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
 			print "FAIL"
+			return T
 
 		Degree = leaves(T)
 		U = T.copy()
@@ -146,23 +146,25 @@ def two_edge_swap(G):
 				path2 = nx.shortest_path(T, e2[0], e2[1])
 				# print path2
 
+				flag = True
 				for f2 in zip(path2[0:],path2[1:]):
 					
 					if f2 != e1 and f2 != e2:
 						if (tuple([f2[0],f2[1]]) in U.edges()):
+							
 							U.remove_edge(f2[0],f2[1])
 						
-						newDegree = leaves(U) 
+							newDegree = leaves(U) 
 
-						if newDegree > Degree:
-							print "Modified"
-							print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
-							print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
-							print str(i) + " of " + str(M) 
-							T = U.copy()
-							Degree = leaves(T)
+							if newDegree > Degree:
+								print "Modified"
+								print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
+								print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
+								print str(i) + " of " + str(M) 
+								T = U.copy()
+								Degree = leaves(T)
 
-						U.add_edge(f2[0],f2[1]);
+							U.add_edge(f2[0],f2[1]);
 
 				U.add_edge(f1[0],f1[1]);		
 
