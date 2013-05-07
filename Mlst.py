@@ -131,7 +131,7 @@ def two_edge_swap(G, T_out = None, I = float("inf"), ):
 
 	if leaves(T1) > leaves(T2) and T == None:
 		T = T1.copy()
-	else: 
+	elif leaves(T1) <= leaves(T2) and T == None: 
 		T = T2.copy()
 
 	T = nx.convert_node_labels_to_integers(T)
@@ -149,7 +149,6 @@ def two_edge_swap(G, T_out = None, I = float("inf"), ):
 		i += 1
 		if i > I:
 			break
-		# print "Edge Pair " + str(e1) + ' ' + str(e2)
 
 		if not is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
 			print "FAIL"
@@ -174,8 +173,6 @@ def two_edge_swap(G, T_out = None, I = float("inf"), ):
 
 				path2 = shortest_path(T, e2[0], e2[1])
 
-				flag = True
-
 				for f2 in zip(path2[0:],path2[1:]):
 					
 					if f2 != e1 and f2 != e2:
@@ -190,7 +187,10 @@ def two_edge_swap(G, T_out = None, I = float("inf"), ):
 								print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
 								print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
 								print str(i) + " of " + str(M) 
+								print leaves(U)
+								print leaves(T)
 								T = U.copy()
+								print leaves(T)
 								Degree = leaves(T)
 
 							add(f2[0],f2[1]);
