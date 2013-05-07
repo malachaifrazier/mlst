@@ -52,6 +52,20 @@ def unityMST(G):
 	T = nx.algorithms.mst.minimum_spanning_tree(G)
 	return T
 
+def check(G):
+	"""
+	Input: a graph G
+	Output: returns 1 if different calls to unityMST have the same output, 0 otherwise
+	"""
+	T1 = unityMST(G)
+	T2 = unityMST(G)
+	T3 = unityMST(G)
+
+	for e in T1.edges():
+		if e not in T2.edges() or e not in T3.edges():
+			return 0
+	return 1
+
 def one_edge_swap(G):
 	""" 
 	Input: Spanning tree T and original graph G 
@@ -93,6 +107,51 @@ def one_edge_swap(G):
 
 	# print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
 
+	return T
+
+def one_edge_swap_mixed(G):
+	""" 
+	Input: Spanning tree T and original graph G 
+	Output: Generate a T one edge swap output
+	"""
+   
+	T1 = degBasedMST(G);
+	T2 = unityMST(G);
+
+	# print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
+	# print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
+
+	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
+		T = T1.copy()
+	else: 
+		T = T2.copy()
+
+	for e in list(set(G.edges()).difference(set(T.edges()))):
+		U = T.copy()
+		
+		try:
+			path = nx.shortest_path(T, e[0], e[1])
+
+			for f in zip(path[0:],path[1:]):
+				Degrees = list(T.degree(T.nodes()).values())
+				
+				U.add_edge(e[0],e[1])
+				U.remove_edge(f[0],f[1])
+
+				newDegrees = list(U.degree(U.nodes()).values()) 
+
+				if newDegrees.count(1) > Degrees.count(1): 
+					T = U.copy()
+
+				U.add_edge(f[0],f[1]);
+
+		except nx.NetworkXNoPath:
+			pass
+
+	# print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
+
+	if leaves(T) < leaves(T2):
+		T = T2
 	return T
 
 def two_edge_swap(G):
