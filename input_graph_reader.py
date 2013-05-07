@@ -17,4 +17,5 @@ def get_nx_graphs(input_filename):
             edge_nodes = [int(x) for x in edge_nodes_str]
             curr_graph.add_edge(edge_nodes[0], edge_nodes[1])
         graph_list.append(curr_graph)
+    fin.close()
     return graph_list
