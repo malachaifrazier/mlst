@@ -72,11 +72,12 @@ def check(G):
 	return 1
 
 def one_edge_swap(G):
-	""" 
-	Input: Spanning tree T and original graph G 
+	"""
+	Implements Lu and Ravi Edge Swap Algorithm
+	Input: Original graph G
 	Output: Generate a T one edge swap output
 	"""
-   
+
 	T1 = degBasedMST(G);
 	T2 = unityMST(G);
 
@@ -87,24 +88,24 @@ def one_edge_swap(G):
 	print "Unity MST: " + str(leaves(T2))
 	if leaves(T1) > leaves(T2):
 		T = T1.copy()
-	else: 
+	else:
 		T = T2.copy()
 
 	for e in list(set(G.edges()).difference(set(T.edges()))):
 		U = T.copy()
-		
+
 		try:
 			path = nx.shortest_path(T, e[0], e[1])
 
 			for f in zip(path[0:],path[1:]):
 				Degrees = list(T.degree(T.nodes()).values())
-				
+
 				U.add_edge(e[0],e[1])
 				U.remove_edge(f[0],f[1])
 
-				newDegrees = list(U.degree(U.nodes()).values()) 
+				newDegrees = list(U.degree(U.nodes()).values())
 
-				if newDegrees.count(1) > Degrees.count(1): 
+				if newDegrees.count(1) > Degrees.count(1):
 					T = U.copy()
 
 				U.add_edge(f[0],f[1]);
@@ -116,107 +117,61 @@ def one_edge_swap(G):
 	print "ONE: " + str(leaves(T))
 	return T
 
-def two_edge_swap(G, T_out = None, I = float("inf"), ):
-
-	""" 
-	Input: Spanning tree T and original graph G 
+def two_edge_swap(G):
+	"""
+	Implements Lu and Ravi Edge Two Swap Algorithm
+	Input: Original graph G
 	Output: Generate a T two edge swap output
+
+	Note: Work in progress
 	"""
 
-	def helper(f1, f2, e1, e2, U, T, Degree):
-		if f2 != e1 and f2 != e2:
-			if (tuple([f2[0],f2[1]]) in U.edges()):
-				U.remove_edge(f2[0],f2[1])
-
-				if leaves(U) > leaves(T):
-					print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
-					# print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
-					print str(i) + " of " + str(M) 
-					print leaves(T)
-					print leaves(U)
-					# T = U.copy()
-					T.add_edges_from([e1,e2])
-					T.remove_edges_from([f1,f2])
-
-				U.add_edge(f2[0],f2[1])
-
-	T1 = degBasedMST(G);
-	T2 = unityMST(G);
-	if T_out != None:
-		T = T_out
-
-	print "Deg Based MST: " + str(leaves(T1))
-	print "Unity MST: " + str(leaves(T2))
-
-	if leaves(T1) > leaves(T2) and T_out == None:
-		T = T1.copy()
-	elif leaves(T1) <= leaves(T2) and T_out == None: 
-		T = T2.copy()
-
-	T = nx.convert_node_labels_to_integers(T)
-	G = nx.convert_node_labels_to_integers(G)
+	T = degBasedMST(G);
 
 	M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
-	M = min([I,M])
+	print M
 
-	shortest_path = nx.shortest_path
-	is_connected = nx.is_connected
-
-	i = 0
-	Degree = leaves(T)
+	i = 1
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
-		if i > I:
-			break
-
-		if not is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
-			print "FAIL"
-			return T
 
 		U = T.copy()
+		Degrees = list(T.degree(T.nodes()).values())
 
-		add = U.add_edge
-		remove = U.remove_edge
-		edges = U.edges
+		try:
+			path1 = nx.shortest_path(T, e1[0], e1[1])
 
-		add(e1[0],e1[1])
-		add(e2[0],e2[1])
+			for f1 in zip(path1[0:],path1[1:]):
 
-		path1 = shortest_path(T, e1[0], e1[1])
-		# print path1
+				U.add_edge(e1[0],e1[1])
+				U.remove_edge(f1[0],f1[1])
 
-		for f1 in zip(path1[0:],path1[1:]):
-			
-			if f1 != e1 and f1 != e2:
-				remove(f1[0],f1[1])
+				try:
+					path2 = nx.shortest_path(T, e2[0], e2[1])
 
-				path2 = shortest_path(T, e2[0], e2[1])
+					for f2 in zip(path2[0:],path2[1:]):
 
-				map(lambda f2: helper(f1, f2, e1, e2, U, T, Degree), zip(path2[0:],path2[1:]))
-				"""for f2 in zip(path2[0:],path2[1:]):
-					
-					if f2 != e1 and f2 != e2:
-						if (tuple([f2[0],f2[1]]) in edges()):
-							
-							remove(f2[0],f2[1])
-						
-							newDegree = leaves(U) 
+						U.add_edge(e2[0],e2[1])
 
-							if newDegree > Degree:
-								print "Modified"
-								print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
-								print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
-								print str(i) + " of " + str(M) 
-								print leaves(U)
-								print leaves(T)
-								T = U.copy()
-								print leaves(T)
-								Degree = leaves(T)
+						if (tuple([f2[0],f2[1]]) in U.edges()):
+							U.remove_edge(f2[0],f2[1])
 
-							add(f2[0],f2[1]);
-					"""
+						newDegrees = list(U.degree(U.nodes()).values())
 
-				add(f1[0],f1[1]);		
+						if newDegrees.count(1) > Degrees.count(1):
+							print newDegrees.count(1)
+							print i
+							T = U.copy()
+							Degrees = list(T.degree(T.nodes()).values())
+
+						U.add_edge(f2[0],f2[1]);
+				except nx.NetworkXNoPath:
+					pass
+
+				U.add_edge(f1[0],f1[1]);
+
+		except nx.NetworkXNoPath:
+			pass
 
 	return T
 
@@ -248,24 +203,24 @@ def get_three_hardest_instances(k):
 		curr_graph_tup1 = in1.instance1_1000()
 		unity_tree1 = unityMST(curr_graph_tup1[0])
 		C4 = tuple([curr_graph_tup1,leaves(curr_graph_tup1[1])-leaves(unity_tree1)])
-		
+
 		curr_graph_tup2 = in1.instance1_2000()
 		unity_tree2 = unityMST(curr_graph_tup2[0])
 		C5 = tuple([curr_graph_tup2,leaves(curr_graph_tup2[1])-leaves(unity_tree2)])
-		
+
 		curr_graph_tup3 = in8.instance8_1000()
 		unity_tree3 = unityMST(curr_graph_tup3[0])
 		C6 = tuple([curr_graph_tup3,leaves(unity_tree3)])
-		
+
 		if C4[1] > C1[1]:
 			C1 = C4
-			
+
 		if C5[1] > C2[1]:
 			C2 = C5
-			
+
 		if C6[1] < C3[1]:
 			C3 = C6
-			
+
 	hard_graphs = [hard_lst[0][0][0],hard_lst[1][0][0],hard_lst[2][0][0]]
 	opt_trees = [hard_lst[0][0][1],hard_lst[1][0][1],two_edge_swap(hard_lst[2][0][0])]
 	return hard_graphs,opt_trees
