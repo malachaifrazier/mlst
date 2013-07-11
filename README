@@ -1,0 +1,3 @@
+Maximum Leaf Spanning Tree
+
+Implementation of Lu & Ravi approximation algorithm for a maximum leaf spanning tree using NetworkX. Original problem is NP-Complete, algorithm approximates correct solution to within a constant factor of optimal solution. 
