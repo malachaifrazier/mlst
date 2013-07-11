@@ -16,12 +16,10 @@ def setEdgeWeights(G):
 	Input: Unweighted networkx undirected graph G
 	Output: Weighted networkx undirected graph where weight of edge is max degree of its endpoint vertexes
 	"""
-	G1 = G.copy()
-	for e in G1.edges():
-		src_deg = G1.degree(e[0])
-		trg_deg = G1.degree(e[1])
-		G1.edge[e[0]][e[1]]['weight'] = max([src_deg,trg_deg])
-	return G1
+	for e in G.edges():
+		src_deg = G.degree(e[0])
+		trg_deg = G.degree(e[1])
+		G.edge[e[0]][e[1]]['weight'] = max([src_deg,trg_deg])
 
 # <codecell>
 
@@ -30,11 +28,8 @@ def unityEdgeWeights(G):
 	Input: Unweighted networkx undirected graph G
 	Output: Weighted networkx undirected graph where weight of edge is one
 	"""
-	G1 = G.copy()
-	for e in G1.edges():
-		G1.edge[e[0]][e[1]]['weight'] = 1
-	return G1
-
+	for e in G.edges():
+		G.edge[e[0]][e[1]]['weight'] = 1
 
 # <codecell>
 
@@ -43,8 +38,8 @@ def degBasedMST(G):
 	Input: Unweighted or Weighted networkx undirected graph G (Caution weights will be overwritten)
 	Output: MST of G where weight of edge is max degree of its endpoint vertexes
 	"""
-	G1 = setEdgeWeights(G)
-	T = nx.algorithms.mst.minimum_spanning_tree(G1)
+	setEdgeWeights(G)
+	T = nx.algorithms.mst.minimum_spanning_tree(G)
 	return T
 
 # <codecell>
@@ -56,20 +51,6 @@ def unityMST(G):
 	"""
 	T = nx.algorithms.mst.minimum_spanning_tree(G)
 	return T
-
-def check(G):
-	"""
-	Input: a graph G
-	Output: returns 1 if different calls to unityMST have the same output, 0 otherwise
-	"""
-	T1 = unityMST(G)
-	T2 = unityMST(G)
-	T3 = unityMST(G)
-
-	for e in T1.edges():
-		if e not in T2.edges() or e not in T3.edges():
-			return 0
-	return 1
 
 def one_edge_swap(G):
 	""" 
@@ -83,9 +64,7 @@ def one_edge_swap(G):
 	# print "Degree Based MST: " + str(list(T1.degree(T1.nodes()).values()).count(1)) + " Leaves"
 	# print "Unity MST: " + str(list(T2.degree(T2.nodes()).values()).count(1)) +  " Leaves"
 
-	print "Deg Based MST: " + str(leaves(T1))
-	print "Unity MST: " + str(leaves(T2))
-	if leaves(T1) > leaves(T2):
+	if list(T1.degree(T1.nodes()).values()).count(1) > list(T2.degree(T2.nodes()).values()).count(1):
 		T = T1.copy()
 	else: 
 		T = T2.copy()
@@ -113,110 +92,61 @@ def one_edge_swap(G):
 			pass
 
 	# print "One Edge Swap: " + str(list(T.degree(T.nodes()).values()).count(1)) + " Leaves"
-	print "ONE: " + str(leaves(T))
+
 	return T
 
-def two_edge_swap(G, T_out = None, I = float("inf"), ):
-
+def two_edge_swap(G):
 	""" 
 	Input: Spanning tree T and original graph G 
-	Output: Generate a T two edge swap output
+	Output: Generate a T one edge swap output
 	"""
 
-	def helper(f1, f2, e1, e2, U, T, Degree):
-		if f2 != e1 and f2 != e2:
-			if (tuple([f2[0],f2[1]]) in U.edges()):
-				U.remove_edge(f2[0],f2[1])
-
-				if leaves(U) > leaves(T):
-					print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
-					# print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
-					print str(i) + " of " + str(M) 
-					print leaves(T)
-					print leaves(U)
-					# T = U.copy()
-					T.add_edges_from([e1,e2])
-					T.remove_edges_from([f1,f2])
-
-				U.add_edge(f2[0],f2[1])
-
-	T1 = degBasedMST(G);
-	T2 = unityMST(G);
-	if T_out != None:
-		T = T_out
-
-	print "Deg Based MST: " + str(leaves(T1))
-	print "Unity MST: " + str(leaves(T2))
-
-	if leaves(T1) > leaves(T2) and T_out == None:
-		T = T1.copy()
-	elif leaves(T1) <= leaves(T2) and T_out == None: 
-		T = T2.copy()
-
-	T = nx.convert_node_labels_to_integers(T)
-	G = nx.convert_node_labels_to_integers(G)
+	T = degBasedMST(G);
 
 	M = count_iterable(it.combinations(list(set(G.edges()).difference(set(T.edges()))),2))
-	M = min([I,M])
+	print M
 
-	shortest_path = nx.shortest_path
-	is_connected = nx.is_connected
-
-	i = 0
-	Degree = leaves(T)
+	i = 1
 	for e1,e2 in it.combinations(list(set(G.edges()).difference(set(T.edges()))),2):
 		i += 1
-		if i > I:
-			break
-
-		if not is_connected(T) or (T.number_of_nodes() != G.number_of_nodes()) or (T.number_of_edges() != T.number_of_nodes() - 1):
-			print "FAIL"
-			return T
 
 		U = T.copy()
+		Degrees = list(T.degree(T.nodes()).values())
+		
+		try:
+			path1 = nx.shortest_path(T, e1[0], e1[1])
 
-		add = U.add_edge
-		remove = U.remove_edge
-		edges = U.edges
+			for f1 in zip(path1[0:],path1[1:]):
+				
+				U.add_edge(e1[0],e1[1])
+				U.remove_edge(f1[0],f1[1])
 
-		add(e1[0],e1[1])
-		add(e2[0],e2[1])
+				try:
+					path2 = nx.shortest_path(T, e2[0], e2[1])
 
-		path1 = shortest_path(T, e1[0], e1[1])
-		# print path1
-
-		for f1 in zip(path1[0:],path1[1:]):
-			
-			if f1 != e1 and f1 != e2:
-				remove(f1[0],f1[1])
-
-				path2 = shortest_path(T, e2[0], e2[1])
-
-				map(lambda f2: helper(f1, f2, e1, e2, U, T, Degree), zip(path2[0:],path2[1:]))
-				"""for f2 in zip(path2[0:],path2[1:]):
-					
-					if f2 != e1 and f2 != e2:
-						if (tuple([f2[0],f2[1]]) in edges()):
+					for f2 in zip(path2[0:],path2[1:]):
 							
-							remove(f2[0],f2[1])
+						U.add_edge(e2[0],e2[1])
 						
-							newDegree = leaves(U) 
+						if (tuple([f2[0],f2[1]]) in U.edges()):
+							U.remove_edge(f2[0],f2[1])
+						
+						newDegrees = list(U.degree(U.nodes()).values()) 
 
-							if newDegree > Degree:
-								print "Modified"
-								print "Added" + ' ' + str(e1[0]) + ' ' + str(e1[1]) + " and " + str(e2[0]) + ' ' + str(e2[1])
-								print "Removed" + ' ' + str(f1[0]) + ' ' + str(f1[1]) + " and " + str(f2[0]) + ' ' + str(f2[1])
-								print str(i) + " of " + str(M) 
-								print leaves(U)
-								print leaves(T)
-								T = U.copy()
-								print leaves(T)
-								Degree = leaves(T)
+						if newDegrees.count(1) > Degrees.count(1):
+							print newDegrees.count(1)
+							print i
+							T = U.copy()
+							Degrees = list(T.degree(T.nodes()).values())
 
-							add(f2[0],f2[1]);
-					"""
+						U.add_edge(f2[0],f2[1]);
+				except nx.NetworkXNoPath:
+					pass
 
-				add(f1[0],f1[1]);		
+				U.add_edge(f1[0],f1[1]);
+
+		except nx.NetworkXNoPath:
+			pass			
 
 	return T
 
